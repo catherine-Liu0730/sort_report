@@ -195,6 +195,58 @@
             line-height: 1.5;
         }
         
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 8px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #2d3436;
+        }
+        
+        .stat-label {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .stat-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #764ba2;
+        }
+        
+        .size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 8px;
+        }
+        
+        .size-control label {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .size-control input {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+            text-align: center;
+        }
+        
         @media (max-width: 600px) {
             .container { 
                 padding: 20px; 
@@ -271,9 +323,36 @@
     
     <div class="animation-section">
         <h3 style="color: #2d3436; margin-bottom: 15px;">排序動畫演示</h3>
+        
+        <div class="size-control">
+            <label for="array-size">陣列大小 (n):</label>
+            <input type="number" id="array-size" min="3" max="15" value="8">
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-label">比較次數:</span>
+                <span class="stat-value" id="comparison-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">交換次數:</span>
+                <span class="stat-value" id="swap-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">已完成輪數:</span>
+                <span class="stat-value" id="round-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">陣列大小:</span>
+                <span class="stat-value" id="array-count">8</span>
+            </div>
+        </div>
+        
         <div id="array-container"></div>
         <div class="controls">
             <button id="start-btn">開始排序</button>
+            <button id="pause-btn" disabled>暫停</button>
+            <button id="step-btn" disabled>單步執行</button>
             <button id="reset-btn">重設陣列</button>
         </div>
         <div id="steps"></div>
@@ -283,13 +362,43 @@
 const arrayContainer = document.getElementById('array-container');
 const stepsDiv = document.getElementById('steps');
 const startBtn = document.getElementById('start-btn');
+const pauseBtn = document.getElementById('pause-btn');
+const stepBtn = document.getElementById('step-btn');
 const resetBtn = document.getElementById('reset-btn');
+const sizeInput = document.getElementById('array-size');
 
 let array = [];
 let sorting = false;
+let paused = false;
+let arraySize = 8;
+let comparisons = 0;
+let swaps = 0;
+let rounds = 0;
+
+function updateStats() {
+    document.getElementById('comparison-count').textContent = comparisons;
+    document.getElementById('swap-count').textContent = swaps;
+    document.getElementById('round-count').textContent = rounds;
+    document.getElementById('array-count').textContent = arraySize;
+}
 
 function randomArray(size = 8, min = 10, max = 99) {
     return Array.from({length: size}, () => Math.floor(Math.random() * (max - min + 1)) + min);
+}
+
+async function sleep(ms) {
+    return new Promise(resolve => {
+        const startTime = Date.now();
+        const checkInterval = setInterval(() => {
+            if (paused) {
+                clearInterval(checkInterval);
+                resolve();
+            } else if (Date.now() - startTime >= ms) {
+                clearInterval(checkInterval);
+                resolve();
+            }
+        }, 50);
+    });
 }
 
 function renderArray(activeIndices = [], sortedIndex = null) {
@@ -320,53 +429,130 @@ function resetSteps() {
 
 async function bubbleSort() {
     sorting = true;
+    paused = false;
     startBtn.disabled = true;
+    pauseBtn.disabled = false;
+    stepBtn.disabled = false;
     resetBtn.disabled = true;
+    sizeInput.disabled = true;
     resetSteps();
+    
     let n = array.length;
     let swapped;
+    
     for (let i = 0; i < n - 1; i++) {
+        rounds = i + 1;
+        updateStats();
+        
         swapped = false;
         for (let j = 0; j < n - i - 1; j++) {
+            // 暫停邏輯
+            while (paused && sorting) {
+                await sleep(100);
+            }
+            if (!sorting) break;
+            
             renderArray([j, j+1], n - i);
             logStep(`比較 <b>${array[j]}</b> 和 <b>${array[j+1]}</b>`);
+            comparisons++;
+            updateStats();
             await sleep(600);
+            
             if (array[j] > array[j+1]) {
                 logStep(`交換 <b>${array[j]}</b> 和 <b>${array[j+1]}</b>`);
                 [array[j], array[j+1]] = [array[j+1], array[j]];
-                swapped = true;
+                swaps++;
+                updateStats();
                 renderArray([j, j+1], n - i);
                 await sleep(600);
+                swapped = true;
             }
         }
+        
+        if (!sorting) break;
+        
         renderArray([], n - i - 1);
         if (!swapped) {
             logStep('本輪無交換，排序完成！');
             break;
         }
     }
-    renderArray([], 0);
-    logStep('<b>排序結束！</b>');
+    
+    if (sorting) {
+        renderArray([], 0);
+        logStep('<b>排序結束！</b>');
+    } else {
+        logStep('<b>排序已停止</b>');
+    }
+    
     sorting = false;
+    paused = false;
     startBtn.disabled = false;
+    pauseBtn.disabled = true;
+    pauseBtn.textContent = '暫停';
+    stepBtn.disabled = true;
     resetBtn.disabled = false;
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    sizeInput.disabled = false;
 }
 
 function resetArray() {
-    array = randomArray();
+    sorting = false;
+    paused = false;
+    arraySize = parseInt(sizeInput.value) || 8;
+    array = randomArray(arraySize);
+    comparisons = 0;
+    swaps = 0;
+    rounds = 0;
     renderArray();
     resetSteps();
+    updateStats();
+    startBtn.disabled = false;
+    pauseBtn.disabled = true;
+    pauseBtn.textContent = '暫停';
+    stepBtn.disabled = true;
+    resetBtn.disabled = false;
+    sizeInput.disabled = false;
 }
 
+sizeInput.addEventListener('change', () => {
+    if (!sorting) {
+        resetArray();
+    }
+});
+
 startBtn.onclick = () => {
-    if (!sorting) bubbleSort();
+    if (!sorting) {
+        arraySize = parseInt(sizeInput.value) || 8;
+        bubbleSort();
+    }
 };
+
+pauseBtn.onclick = () => {
+    if (sorting) {
+        paused = !paused;
+        pauseBtn.textContent = paused ? '繼續' : '暫停';
+        stepBtn.disabled = !paused;
+    }
+};
+
+stepBtn.onclick = () => {
+    if (paused && sorting) {
+        paused = false;
+        pauseBtn.textContent = '暫停';
+        stepBtn.disabled = true;
+        // 會在下一次 await sleep 時再暫停
+        setTimeout(() => {
+            paused = true;
+            pauseBtn.textContent = '繼續';
+            stepBtn.disabled = false;
+        }, 650); // 略大於動畫延遲
+    }
+};
+
 resetBtn.onclick = () => {
-    if (!sorting) resetArray();
+    if (!sorting) {
+        resetArray();
+    }
 };
 
 // 初始化

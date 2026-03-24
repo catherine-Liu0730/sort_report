@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>選擇排序法教學</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Microsoft JhengHei', 'Segoe UI', Arial, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: #fff; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); 
+            padding: 40px; 
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        h1 { 
+            color: #2d3436; 
+            font-size: 2em;
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .back-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .info {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info h2 {
+            color: #2d3436;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .info h3 {
+            color: #2d3436;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .info p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .info ol {
+            padding-left: 25px;
+            color: #555;
+        }
+        
+        .info li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .complexity-table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+        
+        .complexity-table th,
+        .complexity-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+            color: #555;
+        }
+        
+        .complexity-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .complexity-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .array-bar {
+            display: inline-block;
+            margin: 0 2px;
+            background: #a2d5f2;
+            color: #222;
+            font-weight: bold;
+            border-radius: 4px 4px 0 0;
+            text-align: center;
+            vertical-align: bottom;
+            transition: background 0.3s;
+        }
+        
+        .array-bar.active { background: #ffb400; }
+        .array-bar.sorted { background: #70c1b3; }
+        
+        .animation-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+        
+        #array-container { 
+            height: 180px; 
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .controls { 
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        button { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff; 
+            border: none; 
+            padding: 12px 25px; 
+            border-radius: 5px; 
+            font-size: 1rem; 
+            cursor: pointer; 
+            margin-right: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:disabled { 
+            background: #ccc; 
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #steps { 
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .step { 
+            margin: 8px 0;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 8px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #2d3436;
+        }
+        
+        .stat-label {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .stat-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #764ba2;
+        }
+        
+        .size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 8px;
+        }
+        
+        .size-control label {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .size-control input {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+            text-align: center;
+        }
+        
+        @media (max-width: 600px) {
+            .container { 
+                padding: 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+            
+            .array-bar { 
+                width: 18px; 
+                font-size: 0.8em; 
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>選擇排序法（Selection Sort）</h1>
+        <a href="index.html" class="back-link">← 回到首頁</a>
+    </div>
+    
+    <div class="info">
+        <h2>選擇排序法原理</h2>
+        <p>選擇排序法是一種簡單的排序演算法。它會在未排序的序列中找到最小（或最大）元素，存放到排序序列的起始位置，然後再從剩餘未排序元素中繼續尋找最小元素，然後放到已排序序列的末尾。以此類推，直到所有元素均排序完畢。</p>
+        
+        <h3>操作步驟</h3>
+        <ol>
+            <li>從未排序的序列中，找到最小的元素。</li>
+            <li>將這個最小元素與未排序序列的第一個元素交換位置。</li>
+            <li>重複上述步驟，直到所有元素都排序完畢。</li>
+        </ol>
+        
+        <h3>時間與空間複雜度</h3>
+        <table class="complexity-table">
+            <thead>
+                <tr>
+                    <th>項目</th>
+                    <th>複雜度</th>
+                    <th>說明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>最壞時間複雜度</td>
+                    <td>$O(n^2)$</td>
+                    <td>無論輸入資料如何</td>
+                </tr>
+                <tr>
+                    <td>平均時間複雜度</td>
+                    <td>$O(n^2)$</td>
+                    <td>隨機排序的情況</td>
+                </tr>
+                <tr>
+                    <td>最佳時間複雜度</td>
+                    <td>$O(n^2)$</td>
+                    <td>即使已排序也需完整比較</td>
+                </tr>
+                <tr>
+                    <td>空間複雜度</td>
+                    <td>$O(1)$</td>
+                    <td>只需常數大小的額外空間</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="animation-section">
+        <h3 style="color: #2d3436; margin-bottom: 15px;">排序動畫演示</h3>
+        
+        <div class="size-control">
+            <label for="array-size">陣列大小 (n):</label>
+            <input type="number" id="array-size" min="3" max="15" value="8">
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-label">比較次數:</span>
+                <span class="stat-value" id="comparison-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">交換次數:</span>
+                <span class="stat-value" id="swap-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">已完成輪數:</span>
+                <span class="stat-value" id="round-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">陣列大小:</span>
+                <span class="stat-value" id="array-count">8</span>
+            </div>
+        </div>
+        
+        <div id="array-container"></div>
+        <div class="controls">
+            <button id="start-btn">開始排序</button>
+            <button id="pause-btn" disabled>暫停</button>
+            <button id="step-btn" disabled>單步執行</button>
+            <button id="reset-btn">重設陣列</button>
+        </div>
+        <div id="steps"></div>
+    </div>
+</div>
+<script>
+const arrayContainer = document.getElementById('array-container');
+const stepsDiv = document.getElementById('steps');
+const startBtn = document.getElementById('start-btn');
+const pauseBtn = document.getElementById('pause-btn');
+const stepBtn = document.getElementById('step-btn');
+const resetBtn = document.getElementById('reset-btn');
+const sizeInput = document.getElementById('array-size');
+
+let array = [];
+let sorting = false;
+let paused = false;
+let arraySize = 8;
+let comparisons = 0;
+let swaps = 0;
+let rounds = 0;
+
+function updateStats() {
+    document.getElementById('comparison-count').textContent = comparisons;
+    document.getElementById('swap-count').textContent = swaps;
+    document.getElementById('round-count').textContent = rounds;
+    document.getElementById('array-count').textContent = arraySize;
+}
+
+function randomArray(size = 8, min = 10, max = 99) {
+    return Array.from({length: size}, () => Math.floor(Math.random() * (max - min + 1)) + min);
+}
+
+function renderArray(activeIndices = [], sortedIndex = null) {
+    arrayContainer.innerHTML = '';
+    array.forEach((num, i) => {
+        const bar = document.createElement('div');
+        bar.className = 'array-bar';
+        bar.style.height = (num * 2) + 'px';
+        bar.style.width = '36px';
+        bar.textContent = num;
+        if (activeIndices.includes(i)) bar.classList.add('active');
+        if (sortedIndex !== null && i < sortedIndex) bar.classList.add('sorted');
+        arrayContainer.appendChild(bar);
+    });
+}
+
+function logStep(text) {
+    const step = document.createElement('div');
+    step.className = 'step';
+    step.innerHTML = text;
+    stepsDiv.appendChild(step);
+    stepsDiv.scrollTop = stepsDiv.scrollHeight;
+}
+
+function resetSteps() {
+    stepsDiv.innerHTML = '<strong>排序步驟：</strong>';
+}
+
+async function sleep(ms) {
+    return new Promise(resolve => {
+        const startTime = Date.now();
+        const checkInterval = setInterval(() => {
+            if (paused) {
+                clearInterval(checkInterval);
+                resolve();
+            } else if (Date.now() - startTime >= ms) {
+                clearInterval(checkInterval);
+                resolve();
+            }
+        }, 50);
+    });
+}
+
+async function selectionSort() {
+    sorting = true;
+    paused = false;
+    startBtn.disabled = true;
+    pauseBtn.disabled = false;
+    stepBtn.disabled = false;
+    resetBtn.disabled = true;
+    sizeInput.disabled = true;
+    resetSteps();
+    
+    let n = array.length;
+    
+    for (let i = 0; i < n - 1; i++) {
+        rounds = i + 1;
+        updateStats();
+        
+        let minIndex = i;
+        for (let j = i + 1; j < n; j++) {
+            // 暫停邏輯
+            while (paused && sorting) {
+                await sleep(100);
+            }
+            if (!sorting) break;
+            
+            renderArray([minIndex, j], i);
+            logStep(`比較 <b>${array[j]}</b> 與當前最小值 <b>${array[minIndex]}</b>`);
+            comparisons++;
+            updateStats();
+            await sleep(600);
+            
+            if (array[j] < array[minIndex]) {
+                minIndex = j;
+                logStep(`找到更小的值 <b>${array[minIndex]}</b>，更新最小索引`);
+            }
+        }
+        
+        if (!sorting) break;
+        
+        if (minIndex !== i) {
+            logStep(`交換 <b>${array[i]}</b> 和 <b>${array[minIndex]}</b>`);
+            [array[i], array[minIndex]] = [array[minIndex], array[i]];
+            swaps++;
+            updateStats();
+            renderArray([i, minIndex], i);
+            await sleep(600);
+        } else {
+            logStep(`位置 <b>${i}</b> 已是正確的最小值`);
+        }
+        renderArray([], i + 1);
+    }
+    
+    if (sorting) {
+        renderArray([], n);
+        logStep('<b>排序結束！</b>');
+    } else {
+        logStep('<b>排序已停止</b>');
+    }
+    
+    sorting = false;
+    paused = false;
+    startBtn.disabled = false;
+    pauseBtn.disabled = true;
+    pauseBtn.textContent = '暫停';
+    stepBtn.disabled = true;
+    resetBtn.disabled = false;
+    sizeInput.disabled = false;
+}
+
+function resetArray() {
+    sorting = false;
+    paused = false;
+    arraySize = parseInt(sizeInput.value) || 8;
+    array = randomArray(arraySize);
+    comparisons = 0;
+    swaps = 0;
+    rounds = 0;
+    renderArray();
+    resetSteps();
+    updateStats();
+    startBtn.disabled = false;
+    pauseBtn.disabled = true;
+    pauseBtn.textContent = '暫停';
+    stepBtn.disabled = true;
+    resetBtn.disabled = false;
+    sizeInput.disabled = false;
+}
+
+sizeInput.addEventListener('change', () => {
+    if (!sorting) {
+        resetArray();
+    }
+});
+
+startBtn.onclick = () => {
+    if (!sorting) {
+        arraySize = parseInt(sizeInput.value) || 8;
+        selectionSort();
+    }
+};
+
+pauseBtn.onclick = () => {
+    if (sorting) {
+        paused = !paused;
+        pauseBtn.textContent = paused ? '繼續' : '暫停';
+        stepBtn.disabled = !paused;
+    }
+};
+
+stepBtn.onclick = () => {
+    if (paused && sorting) {
+        paused = false;
+        pauseBtn.textContent = '暫停';
+        stepBtn.disabled = true;
+        // 會在下一次 await sleep 時再暫停
+        setTimeout(() => {
+            paused = true;
+            pauseBtn.textContent = '繼續';
+            stepBtn.disabled = false;
+        }, 650); // 略大於動畫延遲
+    }
+};
+
+resetBtn.onclick = () => {
+    if (!sorting) {
+        resetArray();
+    }
+};
+
+// 初始化
+resetArray();
+</script>
+</body>
+</html>
