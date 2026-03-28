@@ -12,18 +12,19 @@
         
         body { 
             font-family: 'Microsoft JhengHei', 'Segoe UI', Arial, sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a2332 0%, #1e3a52 100%);
             min-height: 100vh;
             padding: 30px 20px;
         }
         
         .container { 
-            max-width: 800px; 
+            max-width: 900px; 
             margin: 0 auto; 
-            background: #fff; 
+            background: linear-gradient(135deg, #2d3e52 0%, #1a2d42 100%);
             border-radius: 15px; 
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); 
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(70, 150, 200, 0.2);
             padding: 40px; 
+            border: 2px solid rgba(100, 150, 200, 0.4);
         }
         
         .header {
@@ -36,64 +37,74 @@
         }
         
         h1 { 
-            color: #2d3436; 
-            font-size: 2em;
+            color: #ffffff; 
+            font-size: 2.2em;
             flex: 1;
             min-width: 250px;
+            text-shadow: 0 0 20px rgba(79, 195, 247, 0.5), 0 0 40px rgba(79, 195, 247, 0.2);
+            font-weight: 700;
+            letter-spacing: 1px;
         }
         
         .back-link {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%);
+            color: #ffffff; 
             text-decoration: none;
             padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: 500;
+            border-radius: 8px;
+            font-weight: 600;
             transition: all 0.3s ease;
             cursor: pointer;
             white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
         }
         
         .back-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(79, 195, 247, 0.5);
         }
         
         .info {
-            background: #f0f4ff;
+            background: rgba(79, 195, 247, 0.08);
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 30px;
-            border-left: 4px solid #667eea;
+            border-left: 5px solid #4fc3f7;
+            border: 2px solid rgba(79, 195, 247, 0.2);
         }
         
         .info h2 {
-            color: #2d3436;
+            color: #ffffff;
             margin-bottom: 15px;
-            font-size: 1.4em;
+            font-size: 1.6em;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.3);
         }
         
         .info h3 {
-            color: #2d3436;
+            color: #ffffff;
             margin-top: 15px;
             margin-bottom: 10px;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.3);
         }
         
         .info p {
-            color: #555;
+            color: #ffffff;
             line-height: 1.6;
             margin-bottom: 10px;
         }
         
         .info ol {
             padding-left: 25px;
-            color: #555;
+            color: #ffffff;
         }
         
         .info li {
             margin: 8px 0;
             line-height: 1.6;
+            color: #ffffff;
         }
         
         .complexity-table {
@@ -106,145 +117,244 @@
         .complexity-table td {
             padding: 12px;
             text-align: left;
-            border: 1px solid #e0e0e0;
-            color: #555;
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            color: #ffffff;
         }
         
         .complexity-table th {
-            background: #667eea;
-            color: white;
+            background: linear-gradient(135deg, #1a4d7a 0%, #0d2d47 100%);
+            color: #ffffff;
             font-weight: 600;
+            text-shadow: 0 0 8px rgba(79, 195, 247, 0.3);
         }
         
         .complexity-table tr:nth-child(even) {
-            background: #f9f9f9;
+            background: rgba(79, 195, 247, 0.05);
         }
         
         .array-bar {
             display: inline-block;
             margin: 0 2px;
-            background: #a2d5f2;
-            color: #222;
+            background: #4fc3f7;
+            color: #000;
             font-weight: bold;
             border-radius: 4px 4px 0 0;
             text-align: center;
             vertical-align: bottom;
             transition: background 0.3s;
+            box-shadow: 0 2px 8px rgba(79, 195, 247, 0.4);
         }
         
-        .array-bar.active { background: #ffb400; }
-        .array-bar.sorted { background: #70c1b3; }
+        .array-bar.active { background: #ffca28; }
+        .array-bar.sorted { background: #81c784; }
         
         .animation-section {
             margin: 30px 0;
             padding: 20px;
-            background: #f9f9f9;
+            background: rgba(79, 195, 247, 0.08);
             border-radius: 10px;
+            border: 2px solid rgba(79, 195, 247, 0.2);
         }
         
         #array-container { 
             height: 180px; 
-            margin-bottom: 20px;
-            background: #fff;
+            margin-bottom: 25px;
+            background: rgba(30, 58, 82, 0.6);
             padding: 15px;
             border-radius: 8px;
             text-align: center;
+            border: 2px solid rgba(79, 195, 247, 0.2);
         }
         
         .controls { 
-            margin: 20px 0;
+            margin: 30px 0;
             text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(79, 195, 247, 0.08);
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 2px solid rgba(79, 195, 247, 0.2);
+            margin-bottom: 25px;
+        }
+        
+        .speed-control label {
+            color: #ffffff;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .speed-control input {
+            width: 150px;
+            padding: 5px;
+            background: rgba(30, 58, 82, 0.6);
+            border: 2px solid rgba(79, 195, 247, 0.3);
+            border-radius: 5px;
+        }
+        
+        .speed-value {
+            color: #ffffff;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: right;
         }
         
         button { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff; 
+            background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%);
+            color: #ffffff; 
             border: none; 
-            padding: 12px 25px; 
-            border-radius: 5px; 
+            padding: 12px 30px; 
+            border-radius: 8px; 
             font-size: 1rem; 
             cursor: pointer; 
-            margin-right: 10px;
-            font-weight: 500;
+            font-weight: 700;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
         }
         
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 195, 247, 0.5);
         }
         
         button:disabled { 
-            background: #ccc; 
+            background: #666; 
             cursor: not-allowed;
             transform: none;
+            color: #ffffff;
+            box-shadow: none;
+        }
+        
+        #start-btn {
+            background: linear-gradient(135deg, #81c784 0%, #66bb6a 100%);
+            color: #ffffff;
+        }
+        
+        #start-btn:hover {
+            box-shadow: 0 8px 25px rgba(129, 199, 132, 0.5);
+        }
+        
+        #pause-btn {
+            background: linear-gradient(135deg, #ffca28 0%, #ffa726 100%);
+            color: #ffffff;
+        }
+        
+        #pause-btn:hover {
+            box-shadow: 0 8px 25px rgba(255, 200, 100, 0.5);
+        }
+        
+        #step-btn {
+            background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
+            color: #fff;
+        }
+        
+        #step-btn:hover {
+            box-shadow: 0 8px 25px rgba(239, 83, 80, 0.5);
+        }
+        
+        #reset-btn {
+            background: linear-gradient(135deg, #ba68c8 0%, #ab47bc 100%);
+            color: #fff;
+        }
+        
+        #reset-btn:hover {
+            box-shadow: 0 8px 25px rgba(186, 104, 200, 0.5);
+        }
+        
+        #reset-btn:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.6);
         }
         
         #steps { 
-            background: #fff;
+            background: rgba(30, 58, 82, 0.6);
             padding: 20px;
             border-radius: 8px;
-            border: 1px solid #e0e0e0;
+            border: 2px solid rgba(79, 195, 247, 0.2);
             max-height: 200px;
             overflow-y: auto;
+            color: #ffffff;
         }
         
         .step { 
             margin: 8px 0;
-            color: #555;
+            color: #ffffff;
             line-height: 1.5;
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
         }
         
         .stats-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: 15px;
             margin-bottom: 20px;
-            padding: 15px;
-            background: #f0f4ff;
+            padding: 20px;
+            background: rgba(79, 195, 247, 0.08);
             border-radius: 8px;
+            border: 2px solid rgba(79, 195, 247, 0.2);
         }
         
         .stat-item {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            color: #2d3436;
+            gap: 8px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(79, 195, 247, 0.15) 0%, rgba(129, 199, 132, 0.1) 100%);
+            border-radius: 5px;
+            border: 1px solid rgba(79, 195, 247, 0.3);
         }
         
         .stat-label {
             font-weight: 600;
-            color: #667eea;
+            color: #ffffff;
+            font-size: 0.9em;
         }
         
         .stat-value {
-            font-size: 1.1em;
+            font-size: 1.5em;
             font-weight: bold;
-            color: #764ba2;
+            color: #ffffff;
         }
         
         .size-control {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             padding: 15px;
-            background: #f0f4ff;
+            background: rgba(79, 195, 247, 0.08);
             border-radius: 8px;
+            border: 2px solid rgba(79, 195, 247, 0.2);
         }
         
         .size-control label {
-            color: #667eea;
+            color: #ffffff;
             font-weight: 600;
         }
         
         .size-control input {
             width: 60px;
             padding: 8px;
-            border: 1px solid #667eea;
+            border: 2px solid rgba(79, 195, 247, 0.4);
             border-radius: 5px;
             font-size: 1em;
             text-align: center;
+            background: rgba(30, 58, 82, 0.6);
+            color: #ffffff;
         }
         
         @media (max-width: 600px) {
@@ -265,6 +375,69 @@
                 width: 18px; 
                 font-size: 0.8em; 
             }
+            
+            .stats-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+        
+        /* 滚动条美化 */
+        #steps::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #steps::-webkit-scrollbar-track {
+            background: rgba(79, 195, 247, 0.1);
+            border-radius: 10px;
+        }
+        
+        #steps::-webkit-scrollbar-thumb {
+            background: #ffffff;
+            border-radius: 10px;
+        }
+        
+        #steps::-webkit-scrollbar-thumb:hover {
+            background: #cccccc;
+        }
+        
+        .code-section {
+            background: rgba(30, 58, 82, 0.4);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(79, 195, 247, 0.2);
+        }
+        
+        .code-section h4 {
+            color: #ffffff;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.3);
+        }
+        
+        .code-block {
+            background: rgba(20, 35, 55, 0.8);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+        
+        .code-block code {
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.5;
+            white-space: pre;
         }
     </style>
 </head>
@@ -299,53 +472,63 @@
             <tbody>
                 <tr>
                     <td>最壞時間複雜度</td>
-                    <td>$O(n^2)$</td>
+                    <td>O(n²)</td>
                     <td>陣列完全反向排序時</td>
                 </tr>
                 <tr>
                     <td>平均時間複雜度</td>
-                    <td>$O(n^2)$</td>
+                    <td>O(n²)</td>
                     <td>隨機排序的情況</td>
                 </tr>
                 <tr>
                     <td>最佳時間複雜度</td>
-                    <td>$O(n)$</td>
+                    <td>O(n)</td>
                     <td>陣列已排序時</td>
                 </tr>
                 <tr>
                     <td>空間複雜度</td>
-                    <td>$O(1)$</td>
+                    <td>O(1)</td>
                     <td>只需常數大小的額外空間</td>
                 </tr>
             </tbody>
         </table>
     </div>
     
+    <div class="code-section">
+        <h4>氣泡排序法演算法代碼</h4>
+        <div class="code-block">
+            <code>function bubbleSort(arr) {
+    const n = arr.length;
+    for (let i = 0; i &lt; n - 1; i++) {
+        let swapped = false;
+        for (let j = 0; j &lt; n - i - 1; j++) {
+            // 比較相鄰元素
+            if (arr[j] &gt; arr[j + 1]) {
+                // 交換
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                swapped = true;
+            }
+        }
+        // 如果本輪未交換，排序完成
+        if (!swapped) break;
+    }
+    return arr;
+}</code>
+        </div>
+    </div>
+    
     <div class="animation-section">
-        <h3 style="color: #2d3436; margin-bottom: 15px;">排序動畫演示</h3>
+        <h3 style="color: #ffffff; margin-bottom: 15px; font-size: 1.3em; font-weight: 700; text-shadow: 0 0 10px rgba(79, 195, 247, 0.3);">排序動畫演示</h3>
         
         <div class="size-control">
             <label for="array-size">陣列大小 (n):</label>
             <input type="number" id="array-size" min="3" max="15" value="8">
         </div>
         
-        <div class="stats-container">
-            <div class="stat-item">
-                <span class="stat-label">比較次數:</span>
-                <span class="stat-value" id="comparison-count">0</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">交換次數:</span>
-                <span class="stat-value" id="swap-count">0</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">已完成輪數:</span>
-                <span class="stat-value" id="round-count">0</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">陣列大小:</span>
-                <span class="stat-value" id="array-count">8</span>
-            </div>
+        <div class="speed-control">
+            <label for="speed-slider">動畫速度:</label>
+            <input type="range" id="speed-slider" min="100" max="1000" value="600" step="50">
+            <span class="speed-value" id="speed-value">600ms</span>
         </div>
         
         <div id="array-container"></div>
@@ -355,6 +538,26 @@
             <button id="step-btn" disabled>單步執行</button>
             <button id="reset-btn">重設陣列</button>
         </div>
+        
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-label">比較次數</span>
+                <span class="stat-value" id="comparison-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">交換次數</span>
+                <span class="stat-value" id="swap-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">已完成輪數</span>
+                <span class="stat-value" id="round-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">陣列大小</span>
+                <span class="stat-value" id="array-count">8</span>
+            </div>
+        </div>
+        
         <div id="steps"></div>
     </div>
 </div>
@@ -366,6 +569,8 @@ const pauseBtn = document.getElementById('pause-btn');
 const stepBtn = document.getElementById('step-btn');
 const resetBtn = document.getElementById('reset-btn');
 const sizeInput = document.getElementById('array-size');
+const speedSlider = document.getElementById('speed-slider');
+const speedValue = document.getElementById('speed-value');
 
 let array = [];
 let sorting = false;
@@ -374,6 +579,7 @@ let arraySize = 8;
 let comparisons = 0;
 let swaps = 0;
 let rounds = 0;
+let animationSpeed = 600;
 
 function updateStats() {
     document.getElementById('comparison-count').textContent = comparisons;
@@ -416,6 +622,10 @@ function renderArray(activeIndices = [], sortedIndex = null) {
 }
 
 function logStep(text) {
+    // 清除舊的步驟，只保留標題
+    const children = stepsDiv.querySelectorAll('.step');
+    children.forEach(child => child.remove());
+    
     const step = document.createElement('div');
     step.className = 'step';
     step.innerHTML = text;
@@ -424,7 +634,7 @@ function logStep(text) {
 }
 
 function resetSteps() {
-    stepsDiv.innerHTML = '<strong>排序步驟：</strong>';
+    stepsDiv.innerHTML = '<strong style="color: #ffffff;">排序步驟：</strong>';
 }
 
 async function bubbleSort() {
@@ -456,7 +666,7 @@ async function bubbleSort() {
             logStep(`比較 <b>${array[j]}</b> 和 <b>${array[j+1]}</b>`);
             comparisons++;
             updateStats();
-            await sleep(600);
+            await sleep(animationSpeed);
             
             if (array[j] > array[j+1]) {
                 logStep(`交換 <b>${array[j]}</b> 和 <b>${array[j+1]}</b>`);
@@ -464,7 +674,7 @@ async function bubbleSort() {
                 swaps++;
                 updateStats();
                 renderArray([j, j+1], n - i);
-                await sleep(600);
+                await sleep(animationSpeed);
                 swapped = true;
             }
         }
@@ -520,6 +730,11 @@ sizeInput.addEventListener('change', () => {
     }
 });
 
+speedSlider.addEventListener('input', () => {
+    animationSpeed = parseInt(speedSlider.value);
+    speedValue.textContent = animationSpeed + 'ms';
+});
+
 startBtn.onclick = () => {
     if (!sorting) {
         arraySize = parseInt(sizeInput.value) || 8;
@@ -545,7 +760,7 @@ stepBtn.onclick = () => {
             paused = true;
             pauseBtn.textContent = '繼續';
             stepBtn.disabled = false;
-        }, 650); // 略大於動畫延遲
+        }, animationSpeed + 50); // 略大於動畫延遲
     }
 };
 
