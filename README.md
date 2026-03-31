@@ -1,8 +1,10 @@
 # 排序報告
 
-學號:11428207
-姓名:劉芷鈴
-模擬頁面:https://catherine-liu0730.github.io/sort_report/
+學號: 11428207
+
+姓名: 劉芷鈴
+
+模擬頁面: https://catherine-liu0730.github.io/sort_report/
 
 ## 氣泡排序法
 
