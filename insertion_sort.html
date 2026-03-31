@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>選擇排序法教學</title>
+    <title>插入排序法教學</title>
     <style>
         * {
             margin: 0;
@@ -176,7 +176,7 @@
             left: 15px;
             right: 15px;
             height: 2px;
-            background: linear-gradient(90deg, rgba(79, 195, 247, 0.3), rgba(79, 195, 247, 0.6), rgba(79, 195, 247, 0.3));
+            background: transparent;
             border-radius: 1px;
             z-index: 1;
         }
@@ -214,7 +214,6 @@
             background: rgba(30, 58, 82, 0.6);
             border: 2px solid rgba(79, 195, 247, 0.3);
             border-radius: 5px;
-            color: #ffffff;
         }
         
         .speed-value {
@@ -286,6 +285,10 @@
             box-shadow: 0 8px 25px rgba(186, 104, 200, 0.5);
         }
         
+        #reset-btn:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.6);
+        }
+        
         #steps { 
             background: rgba(30, 58, 82, 0.6);
             padding: 20px;
@@ -300,6 +303,12 @@
             margin: 8px 0;
             color: #ffffff;
             line-height: 1.5;
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
         }
         
         .stats-container {
@@ -361,12 +370,6 @@
             text-align: center;
             background: rgba(30, 58, 82, 0.6);
             color: #ffffff;
-        }
-        
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            70% { opacity: 1; }
-            100% { opacity: 0; }
         }
         
         @media (max-width: 600px) {
@@ -456,19 +459,20 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>選擇排序法（Selection Sort）</h1>
+        <h1>插入排序法（Insertion Sort）</h1>
         <a href="index.html" class="back-link">← 回到首頁</a>
     </div>
     
     <div class="info">
-        <h2>選擇排序法原理</h2>
-        <p>選擇排序法是一種簡單的排序演算法。它會在未排序的序列中找到最小（或最大）元素，存放到排序序列的起始位置，然後再從剩餘未排序元素中繼續尋找最小元素，然後放到已排序序列的末尾。以此類推，直到所有元素均排序完畢。</p>
+        <h2>插入排序法原理</h2>
+        <p>插入排序法是一種基於比較的排序演算法。它透過構建一個已排序的序列，然後逐個將未排序的元素插入到已排序序列的適當位置，直到整個序列有序為止。</p>
         
         <h3>操作步驟</h3>
         <ol>
-            <li>從未排序的序列中，找到最小的元素。</li>
-            <li>將這個最小元素與未排序序列的第一個元素交換位置。</li>
-            <li>重複上述步驟，直到所有元素都排序完畢。</li>
+            <li>從第二個元素開始，將其視為待插入的元素。</li>
+            <li>在已排序的序列中從右到左掃描，找到合適的位置。</li>
+            <li>將待插入元素移動到該位置（其他元素向右移動）。</li>
+            <li>重複上述步驟，直到所有元素都被處理。</li>
         </ol>
         
         <h3>時間與空間複雜度</h3>
@@ -484,7 +488,7 @@
                 <tr>
                     <td>最壞時間複雜度</td>
                     <td>O(n²)</td>
-                    <td>無論輸入資料如何</td>
+                    <td>陣列完全反向排序時</td>
                 </tr>
                 <tr>
                     <td>平均時間複雜度</td>
@@ -493,8 +497,8 @@
                 </tr>
                 <tr>
                     <td>最佳時間複雜度</td>
-                    <td>O(n²)</td>
-                    <td>即使已排序也需完整比較</td>
+                    <td>O(n)</td>
+                    <td>陣列已排序時</td>
                 </tr>
                 <tr>
                     <td>空間複雜度</td>
@@ -506,22 +510,20 @@
     </div>
     
     <div class="code-section">
-        <h4>選擇排序法演算法代碼</h4>
+        <h4>插入排序法演算法代碼</h4>
         <div class="code-block">
-            <code>function selectionSort(arr) {
+            <code>function insertionSort(arr) {
     const n = arr.length;
-    for (let i = 0; i &lt; n - 1; i++) {
-        let minIndex = i;
-        // 找到未排序部分的最小元素索引
-        for (let j = i + 1; j &lt; n; j++) {
-            if (arr[j] &lt; arr[minIndex]) {
-                minIndex = j;
-            }
+    for (let i = 1; i &lt; n; i++) {
+        const key = arr[i];
+        let j = i - 1;
+        // 在已排序的部分中找到正確位置
+        while (j &gt;= 0 &amp;&amp; arr[j] &gt; key) {
+            arr[j + 1] = arr[j];
+            j--;
         }
-        // 將最小元素交換到第 i 個位置
-        if (minIndex !== i) {
-            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
-        }
+        // 將 key 插入到正確位置
+        arr[j + 1] = key;
     }
     return arr;
 }</code>
@@ -542,7 +544,9 @@
             <span class="speed-value" id="speed-value">600ms</span>
         </div>
         
-        <div id="array-container"></div>
+        <div id="array-container">
+            <div class="baseline-line"></div>
+        </div>
         <div class="controls">
             <button id="start-btn">開始排序</button>
             <button id="pause-btn" disabled>暫停</button>
@@ -556,7 +560,7 @@
                 <span class="stat-value" id="comparison-count">0</span>
             </div>
             <div class="stat-item">
-                <span class="stat-label">交換次數</span>
+                <span class="stat-label">移動次數</span>
                 <span class="stat-value" id="swap-count">0</span>
             </div>
             <div class="stat-item">
@@ -603,8 +607,26 @@ function randomArray(size = 8, min = 10, max = 99) {
     return Array.from({length: size}, () => Math.floor(Math.random() * (max - min + 1)) + min);
 }
 
+async function sleep(ms) {
+    return new Promise(resolve => {
+        const startTime = Date.now();
+        const checkInterval = setInterval(() => {
+            if (paused) {
+                clearInterval(checkInterval);
+                resolve();
+            } else if (Date.now() - startTime >= ms) {
+                clearInterval(checkInterval);
+                resolve();
+            }
+        }, 50);
+    });
+}
+
 function renderArray(activeIndices = [], sortedIndex = null) {
-    arrayContainer.innerHTML = '';
+    // 移除所有的 array-bar 元素，但保留 baseline-line
+    const bars = arrayContainer.querySelectorAll('.array-bar');
+    bars.forEach(bar => bar.remove());
+    
     array.forEach((num, i) => {
         const bar = document.createElement('div');
         bar.className = 'array-bar';
@@ -612,7 +634,7 @@ function renderArray(activeIndices = [], sortedIndex = null) {
         bar.style.width = '36px';
         bar.textContent = num;
         if (activeIndices.includes(i)) bar.classList.add('active');
-        if (sortedIndex !== null && i >= sortedIndex) bar.classList.add('sorted');
+        if (sortedIndex !== null && i <= sortedIndex) bar.classList.add('sorted');
         arrayContainer.appendChild(bar);
     });
 }
@@ -633,22 +655,7 @@ function resetSteps() {
     stepsDiv.innerHTML = '<strong style="color: #ffffff;">排序步驟：</strong>';
 }
 
-async function sleep(ms) {
-    return new Promise(resolve => {
-        const startTime = Date.now();
-        const checkInterval = setInterval(() => {
-            if (paused) {
-                clearInterval(checkInterval);
-                resolve();
-            } else if (Date.now() - startTime >= ms) {
-                clearInterval(checkInterval);
-                resolve();
-            }
-        }, 50);
-    });
-}
-
-async function selectionSort() {
+async function insertionSort() {
     sorting = true;
     paused = false;
     startBtn.disabled = true;
@@ -660,45 +667,54 @@ async function selectionSort() {
     
     let n = array.length;
     
-    for (let i = 0; i < n - 1; i++) {
-        rounds = i + 1;
+    for (let i = 1; i < n; i++) {
+        rounds = i;
         updateStats();
         
-        let minIndex = i;
-        for (let j = i + 1; j < n; j++) {
+        const key = array[i];
+        renderArray([i], i - 1);
+        logStep(`選擇元素 <b>${key}</b> 進行插入`);
+        await sleep(animationSpeed);
+        
+        let j = i - 1;
+        while (j >= 0) {
             // 暫停邏輯
             while (paused && sorting) {
                 await sleep(100);
             }
             if (!sorting) break;
             
-            renderArray([minIndex, j], i);
-            logStep(`比較 <b>${array[minIndex]}</b> 和 <b>${array[j]}</b>`);
+            renderArray([i, j], i - 1);
+            logStep(`比較 <b>${array[j]}</b> 和 <b>${key}</b>`);
             comparisons++;
             updateStats();
             await sleep(animationSpeed);
             
-            if (array[j] < array[minIndex]) {
-                minIndex = j;
+            if (array[j] > key) {
+                // 向右移動
+                array[j + 1] = array[j];
+                renderArray([j, j + 1], i - 1);
+                logStep(`移動 <b>${array[j]}</b> 向右`);
+                swaps++;
+                updateStats();
+                await sleep(animationSpeed);
+                j--;
+            } else {
+                break;
             }
         }
         
         if (!sorting) break;
         
-        if (minIndex !== i) {
-            logStep(`交換 <b>${array[i]}</b> 和 <b>${array[minIndex]}</b>`);
-            [array[i], array[minIndex]] = [array[minIndex], array[i]];
-            swaps++;
-            updateStats();
-            renderArray([i, minIndex], i);
-            await sleep(animationSpeed);
-        }
-        
-        renderArray([], i + 1);
+        // 將 key 插入到正確位置
+        array[j + 1] = key;
+        renderArray([j + 1], i);
+        logStep(`在位置 ${j + 1} 插入 <b>${key}</b>`);
+        await sleep(animationSpeed);
     }
     
     if (sorting) {
-        renderArray([], n);
+        renderArray([], n - 1);
         logStep('<b>排序結束！</b>');
     } else {
         logStep('<b>排序已停止</b>');
@@ -747,7 +763,7 @@ speedSlider.addEventListener('input', () => {
 startBtn.onclick = () => {
     if (!sorting) {
         arraySize = parseInt(sizeInput.value) || 8;
-        selectionSort();
+        insertionSort();
     }
 };
 

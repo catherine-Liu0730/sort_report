@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>選擇排序法教學</title>
+    <title>快速排序法教學</title>
     <style>
         * {
             margin: 0;
@@ -146,6 +146,7 @@
         }
         
         .array-bar.active { background: #ffca28; }
+        .array-bar.pivot { background: #ff7043; }
         .array-bar.sorted { background: #81c784; }
         
         .animation-section {
@@ -214,7 +215,6 @@
             background: rgba(30, 58, 82, 0.6);
             border: 2px solid rgba(79, 195, 247, 0.3);
             border-radius: 5px;
-            color: #ffffff;
         }
         
         .speed-value {
@@ -286,6 +286,10 @@
             box-shadow: 0 8px 25px rgba(186, 104, 200, 0.5);
         }
         
+        #reset-btn:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.6);
+        }
+        
         #steps { 
             background: rgba(30, 58, 82, 0.6);
             padding: 20px;
@@ -300,6 +304,12 @@
             margin: 8px 0;
             color: #ffffff;
             line-height: 1.5;
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
         }
         
         .stats-container {
@@ -361,12 +371,6 @@
             text-align: center;
             background: rgba(30, 58, 82, 0.6);
             color: #ffffff;
-        }
-        
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            70% { opacity: 1; }
-            100% { opacity: 0; }
         }
         
         @media (max-width: 600px) {
@@ -456,19 +460,20 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>選擇排序法（Selection Sort）</h1>
+        <h1>快速排序法（Quick Sort）</h1>
         <a href="index.html" class="back-link">← 回到首頁</a>
     </div>
     
     <div class="info">
-        <h2>選擇排序法原理</h2>
-        <p>選擇排序法是一種簡單的排序演算法。它會在未排序的序列中找到最小（或最大）元素，存放到排序序列的起始位置，然後再從剩餘未排序元素中繼續尋找最小元素，然後放到已排序序列的末尾。以此類推，直到所有元素均排序完畢。</p>
+        <h2>快速排序法原理</h2>
+        <p>快速排序法是一種高效的排序演算法，採用分治策略。它選擇一個樞紐元素，將陣列分為兩部分：小於樞紐的元素和大於樞紐的元素，然後遞歸地對兩部分排序。</p>
         
         <h3>操作步驟</h3>
         <ol>
-            <li>從未排序的序列中，找到最小的元素。</li>
-            <li>將這個最小元素與未排序序列的第一個元素交換位置。</li>
-            <li>重複上述步驟，直到所有元素都排序完畢。</li>
+            <li>選擇一個樞紐元素（通常是隨機或中位數）。</li>
+            <li>將陣列分割為三部分：小於樞紐、等於樞紐、大於樞紐。</li>
+            <li>遞歸地對小於和大於樞紐的部分進行排序。</li>
+            <li>合併這三部分得到最終的有序陣列。</li>
         </ol>
         
         <h3>時間與空間複雜度</h3>
@@ -484,46 +489,51 @@
                 <tr>
                     <td>最壞時間複雜度</td>
                     <td>O(n²)</td>
-                    <td>無論輸入資料如何</td>
+                    <td>樞紐選擇不當時（如總選最大/最小值）</td>
                 </tr>
                 <tr>
                     <td>平均時間複雜度</td>
-                    <td>O(n²)</td>
-                    <td>隨機排序的情況</td>
+                    <td>O(n log n)</td>
+                    <td>樞紐選擇較好的一般情況</td>
                 </tr>
                 <tr>
                     <td>最佳時間複雜度</td>
-                    <td>O(n²)</td>
-                    <td>即使已排序也需完整比較</td>
+                    <td>O(n log n)</td>
+                    <td>樞紐總是分割點的中位數時</td>
                 </tr>
                 <tr>
                     <td>空間複雜度</td>
-                    <td>O(1)</td>
-                    <td>只需常數大小的額外空間</td>
+                    <td>O(log n)</td>
+                    <td>遞歸呼叫棧的深度</td>
                 </tr>
             </tbody>
         </table>
     </div>
     
     <div class="code-section">
-        <h4>選擇排序法演算法代碼</h4>
+        <h4>快速排序法演算法代碼</h4>
         <div class="code-block">
-            <code>function selectionSort(arr) {
-    const n = arr.length;
-    for (let i = 0; i &lt; n - 1; i++) {
-        let minIndex = i;
-        // 找到未排序部分的最小元素索引
-        for (let j = i + 1; j &lt; n; j++) {
-            if (arr[j] &lt; arr[minIndex]) {
-                minIndex = j;
-            }
-        }
-        // 將最小元素交換到第 i 個位置
-        if (minIndex !== i) {
-            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
-        }
+            <code>function quickSort(arr, low = 0, high = arr.length - 1) {
+    if (low < high) {
+        const pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
     }
     return arr;
+}
+
+function partition(arr, low, high) {
+    const pivot = arr[high];
+    let i = low - 1;
+    
+    for (let j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+    }
+    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+    return i + 1;
 }</code>
         </div>
     </div>
@@ -542,7 +552,9 @@
             <span class="speed-value" id="speed-value">600ms</span>
         </div>
         
-        <div id="array-container"></div>
+        <div id="array-container">
+            <div class="baseline-line"></div>
+        </div>
         <div class="controls">
             <button id="start-btn">開始排序</button>
             <button id="pause-btn" disabled>暫停</button>
@@ -560,8 +572,8 @@
                 <span class="stat-value" id="swap-count">0</span>
             </div>
             <div class="stat-item">
-                <span class="stat-label">已完成輪數</span>
-                <span class="stat-value" id="round-count">0</span>
+                <span class="stat-label">分割次數</span>
+                <span class="stat-value" id="partition-count">0</span>
             </div>
             <div class="stat-item">
                 <span class="stat-label">陣列大小</span>
@@ -589,13 +601,13 @@ let paused = false;
 let arraySize = 8;
 let comparisons = 0;
 let swaps = 0;
-let rounds = 0;
+let partitions = 0;
 let animationSpeed = 600;
 
 function updateStats() {
     document.getElementById('comparison-count').textContent = comparisons;
     document.getElementById('swap-count').textContent = swaps;
-    document.getElementById('round-count').textContent = rounds;
+    document.getElementById('partition-count').textContent = partitions;
     document.getElementById('array-count').textContent = arraySize;
 }
 
@@ -603,7 +615,22 @@ function randomArray(size = 8, min = 10, max = 99) {
     return Array.from({length: size}, () => Math.floor(Math.random() * (max - min + 1)) + min);
 }
 
-function renderArray(activeIndices = [], sortedIndex = null) {
+async function sleep(ms) {
+    return new Promise(resolve => {
+        const startTime = Date.now();
+        const checkInterval = setInterval(() => {
+            if (paused) {
+                clearInterval(checkInterval);
+                resolve();
+            } else if (Date.now() - startTime >= ms) {
+                clearInterval(checkInterval);
+                resolve();
+            }
+        }, 50);
+    });
+}
+
+function renderArray(activeIndices = [], pivotIndex = null, sortedIndices = []) {
     arrayContainer.innerHTML = '';
     array.forEach((num, i) => {
         const bar = document.createElement('div');
@@ -612,7 +639,8 @@ function renderArray(activeIndices = [], sortedIndex = null) {
         bar.style.width = '36px';
         bar.textContent = num;
         if (activeIndices.includes(i)) bar.classList.add('active');
-        if (sortedIndex !== null && i >= sortedIndex) bar.classList.add('sorted');
+        if (i === pivotIndex) bar.classList.add('pivot');
+        if (sortedIndices.includes(i)) bar.classList.add('sorted');
         arrayContainer.appendChild(bar);
     });
 }
@@ -633,22 +661,67 @@ function resetSteps() {
     stepsDiv.innerHTML = '<strong style="color: #ffffff;">排序步驟：</strong>';
 }
 
-async function sleep(ms) {
-    return new Promise(resolve => {
-        const startTime = Date.now();
-        const checkInterval = setInterval(() => {
-            if (paused) {
-                clearInterval(checkInterval);
-                resolve();
-            } else if (Date.now() - startTime >= ms) {
-                clearInterval(checkInterval);
-                resolve();
+async function partition(low, high, sortedIndices = []) {
+    const pivot = array[high];
+    logStep(`選擇樞紐元素 <b>${pivot}</b> (位置 ${high})`);
+    renderArray([high], high, sortedIndices);
+    await sleep(animationSpeed);
+    
+    let i = low - 1;
+    
+    for (let j = low; j < high; j++) {
+        while (paused && sorting) {
+            await sleep(100);
+        }
+        if (!sorting) break;
+        
+        renderArray([j, high], high, sortedIndices);
+        logStep(`比較 <b>${array[j]}</b> 和樞紐 <b>${pivot}</b>`);
+        comparisons++;
+        updateStats();
+        await sleep(animationSpeed);
+        
+        if (array[j] < pivot) {
+            i++;
+            if (i !== j) {
+                logStep(`交換 <b>${array[i]}</b> 和 <b>${array[j]}</b>`);
+                [array[i], array[j]] = [array[j], array[i]];
+                swaps++;
+                updateStats();
+                renderArray([i, j], high, sortedIndices);
+                await sleep(animationSpeed);
             }
-        }, 50);
-    });
+        }
+    }
+    
+    if (!sorting) return i + 1;
+    
+    logStep(`將樞紐 <b>${pivot}</b> 放到位置 ${i + 1}`);
+    [array[i + 1], array[high]] = [array[high], array[i + 1]];
+    swaps++;
+    updateStats();
+    renderArray([i + 1], i + 1, sortedIndices);
+    await sleep(animationSpeed);
+    
+    return i + 1;
 }
 
-async function selectionSort() {
+async function quickSortHelper(low, high, sortedIndices = []) {
+    if (low < high) {
+        const pi = await partition(low, high, sortedIndices);
+        if (!sorting) return;
+        
+        partitions++;
+        updateStats();
+        await quickSortHelper(low, pi - 1, sortedIndices);
+        if (!sorting) return;
+        await quickSortHelper(pi + 1, high, [...sortedIndices, pi]);
+    } else if (low === high) {
+        sortedIndices.push(low);
+    }
+}
+
+async function quickSort() {
     sorting = true;
     paused = false;
     startBtn.disabled = true;
@@ -658,47 +731,10 @@ async function selectionSort() {
     sizeInput.disabled = true;
     resetSteps();
     
-    let n = array.length;
-    
-    for (let i = 0; i < n - 1; i++) {
-        rounds = i + 1;
-        updateStats();
-        
-        let minIndex = i;
-        for (let j = i + 1; j < n; j++) {
-            // 暫停邏輯
-            while (paused && sorting) {
-                await sleep(100);
-            }
-            if (!sorting) break;
-            
-            renderArray([minIndex, j], i);
-            logStep(`比較 <b>${array[minIndex]}</b> 和 <b>${array[j]}</b>`);
-            comparisons++;
-            updateStats();
-            await sleep(animationSpeed);
-            
-            if (array[j] < array[minIndex]) {
-                minIndex = j;
-            }
-        }
-        
-        if (!sorting) break;
-        
-        if (minIndex !== i) {
-            logStep(`交換 <b>${array[i]}</b> 和 <b>${array[minIndex]}</b>`);
-            [array[i], array[minIndex]] = [array[minIndex], array[i]];
-            swaps++;
-            updateStats();
-            renderArray([i, minIndex], i);
-            await sleep(animationSpeed);
-        }
-        
-        renderArray([], i + 1);
-    }
+    await quickSortHelper(0, array.length - 1);
     
     if (sorting) {
-        renderArray([], n);
+        renderArray();
         logStep('<b>排序結束！</b>');
     } else {
         logStep('<b>排序已停止</b>');
@@ -721,7 +757,7 @@ function resetArray() {
     array = randomArray(arraySize);
     comparisons = 0;
     swaps = 0;
-    rounds = 0;
+    partitions = 0;
     renderArray();
     resetSteps();
     updateStats();
@@ -747,7 +783,7 @@ speedSlider.addEventListener('input', () => {
 startBtn.onclick = () => {
     if (!sorting) {
         arraySize = parseInt(sizeInput.value) || 8;
-        selectionSort();
+        quickSort();
     }
 };
 
@@ -764,12 +800,11 @@ stepBtn.onclick = () => {
         paused = false;
         pauseBtn.textContent = '暫停';
         stepBtn.disabled = true;
-        // 會在下一次 await sleep 時再暫停
         setTimeout(() => {
             paused = true;
             pauseBtn.textContent = '繼續';
             stepBtn.disabled = false;
-        }, animationSpeed + 50); // 略大於動畫延遲
+        }, animationSpeed + 50);
     }
 };
 

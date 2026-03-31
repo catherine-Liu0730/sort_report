@@ -157,13 +157,28 @@
         }
         
         #array-container { 
-            height: 180px; 
+            height: 320px; 
             margin-bottom: 25px;
             background: rgba(30, 58, 82, 0.6);
             padding: 15px;
             border-radius: 8px;
             text-align: center;
             border: 2px solid rgba(79, 195, 247, 0.2);
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        
+        .baseline-line {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(79, 195, 247, 0.3), rgba(79, 195, 247, 0.6), rgba(79, 195, 247, 0.3));
+            border-radius: 1px;
+            z-index: 1;
         }
         
         .controls { 
@@ -531,7 +546,9 @@
             <span class="speed-value" id="speed-value">600ms</span>
         </div>
         
-        <div id="array-container"></div>
+        <div id="array-container">
+            <div class="baseline-line"></div>
+        </div>
         <div class="controls">
             <button id="start-btn">開始排序</button>
             <button id="pause-btn" disabled>暫停</button>

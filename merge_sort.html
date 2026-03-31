@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>選擇排序法教學</title>
+    <title>合併排序法教學</title>
     <style>
         * {
             margin: 0;
@@ -214,7 +214,6 @@
             background: rgba(30, 58, 82, 0.6);
             border: 2px solid rgba(79, 195, 247, 0.3);
             border-radius: 5px;
-            color: #ffffff;
         }
         
         .speed-value {
@@ -363,12 +362,6 @@
             color: #ffffff;
         }
         
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            70% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        
         @media (max-width: 600px) {
             .container { 
                 padding: 20px; 
@@ -456,19 +449,20 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>選擇排序法（Selection Sort）</h1>
+        <h1>合併排序法（Merge Sort）</h1>
         <a href="index.html" class="back-link">← 回到首頁</a>
     </div>
     
     <div class="info">
-        <h2>選擇排序法原理</h2>
-        <p>選擇排序法是一種簡單的排序演算法。它會在未排序的序列中找到最小（或最大）元素，存放到排序序列的起始位置，然後再從剩餘未排序元素中繼續尋找最小元素，然後放到已排序序列的末尾。以此類推，直到所有元素均排序完畢。</p>
+        <h2>合併排序法原理</h2>
+        <p>合併排序法是一種高效的排序演算法，採用分治法的思想。它將待排序的資料列逐次分割成較小的部分，對各部分進行排序，最後將各部分合併成一個有序的序列。</p>
         
         <h3>操作步驟</h3>
         <ol>
-            <li>從未排序的序列中，找到最小的元素。</li>
-            <li>將這個最小元素與未排序序列的第一個元素交換位置。</li>
-            <li>重複上述步驟，直到所有元素都排序完畢。</li>
+            <li><b>分割階段</b>：將原陣列遞迴地分割成只包含一個元素的子陣列。</li>
+            <li><b>合併階段</b>：比較兩個子陣列中的首個元素，將較小的元素加入結果陣列。</li>
+            <li>重複上述步驟，直到所有元素都被加入結果陣列。</li>
+            <li>將分割後的子陣列從下而上逐層合併，最終得到排序完成的陣列。</li>
         </ol>
         
         <h3>時間與空間複雜度</h3>
@@ -483,47 +477,56 @@
             <tbody>
                 <tr>
                     <td>最壞時間複雜度</td>
-                    <td>O(n²)</td>
-                    <td>無論輸入資料如何</td>
+                    <td>O(n log n)</td>
+                    <td>任意情況下都是這個複雜度</td>
                 </tr>
                 <tr>
                     <td>平均時間複雜度</td>
-                    <td>O(n²)</td>
+                    <td>O(n log n)</td>
                     <td>隨機排序的情況</td>
                 </tr>
                 <tr>
                     <td>最佳時間複雜度</td>
-                    <td>O(n²)</td>
-                    <td>即使已排序也需完整比較</td>
+                    <td>O(n log n)</td>
+                    <td>陣列已排序時仍為 O(n log n)</td>
                 </tr>
                 <tr>
                     <td>空間複雜度</td>
-                    <td>O(1)</td>
-                    <td>只需常數大小的額外空間</td>
+                    <td>O(n)</td>
+                    <td>需要額外的空間儲存臨時子陣列</td>
                 </tr>
             </tbody>
         </table>
     </div>
     
     <div class="code-section">
-        <h4>選擇排序法演算法代碼</h4>
+        <h4>合併排序法演算法代碼</h4>
         <div class="code-block">
-            <code>function selectionSort(arr) {
-    const n = arr.length;
-    for (let i = 0; i &lt; n - 1; i++) {
-        let minIndex = i;
-        // 找到未排序部分的最小元素索引
-        for (let j = i + 1; j &lt; n; j++) {
-            if (arr[j] &lt; arr[minIndex]) {
-                minIndex = j;
-            }
-        }
-        // 將最小元素交換到第 i 個位置
-        if (minIndex !== i) {
-            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+            <code>function mergeSort(arr) {
+    if (arr.length &lt;= 1) return arr;
+    
+    // 分割
+    const mid = Math.floor(arr.length / 2);
+    const left = mergeSort(arr.slice(0, mid));
+    const right = mergeSort(arr.slice(mid));
+    
+    // 合併
+    return merge(left, right);
+}
+
+function merge(left, right) {
+    const result = [];
+    let i = 0, j = 0;
+    
+    while (i &lt; left.length &amp;&amp; j &lt; right.length) {
+        if (left[i] &lt;= right[j]) {
+            result.push(left[i++]);
+        } else {
+            result.push(right[j++]);
         }
     }
-    return arr;
+    
+    return result.concat(left.slice(i)).concat(right.slice(j));
 }</code>
         </div>
     </div>
@@ -542,7 +545,9 @@
             <span class="speed-value" id="speed-value">600ms</span>
         </div>
         
-        <div id="array-container"></div>
+        <div id="array-container">
+            <div class="baseline-line"></div>
+        </div>
         <div class="controls">
             <button id="start-btn">開始排序</button>
             <button id="pause-btn" disabled>暫停</button>
@@ -556,11 +561,11 @@
                 <span class="stat-value" id="comparison-count">0</span>
             </div>
             <div class="stat-item">
-                <span class="stat-label">交換次數</span>
+                <span class="stat-label">複製次數</span>
                 <span class="stat-value" id="swap-count">0</span>
             </div>
             <div class="stat-item">
-                <span class="stat-label">已完成輪數</span>
+                <span class="stat-label">合併層級</span>
                 <span class="stat-value" id="round-count">0</span>
             </div>
             <div class="stat-item">
@@ -591,11 +596,12 @@ let comparisons = 0;
 let swaps = 0;
 let rounds = 0;
 let animationSpeed = 600;
+let mergeLevels = 0;
 
 function updateStats() {
     document.getElementById('comparison-count').textContent = comparisons;
     document.getElementById('swap-count').textContent = swaps;
-    document.getElementById('round-count').textContent = rounds;
+    document.getElementById('round-count').textContent = mergeLevels;
     document.getElementById('array-count').textContent = arraySize;
 }
 
@@ -603,7 +609,22 @@ function randomArray(size = 8, min = 10, max = 99) {
     return Array.from({length: size}, () => Math.floor(Math.random() * (max - min + 1)) + min);
 }
 
-function renderArray(activeIndices = [], sortedIndex = null) {
+async function sleep(ms) {
+    return new Promise(resolve => {
+        const startTime = Date.now();
+        const checkInterval = setInterval(() => {
+            if (paused) {
+                clearInterval(checkInterval);
+                resolve();
+            } else if (Date.now() - startTime >= ms) {
+                clearInterval(checkInterval);
+                resolve();
+            }
+        }, 50);
+    });
+}
+
+function renderArray(activeIndices = [], sortedIndices = []) {
     arrayContainer.innerHTML = '';
     array.forEach((num, i) => {
         const bar = document.createElement('div');
@@ -612,7 +633,7 @@ function renderArray(activeIndices = [], sortedIndex = null) {
         bar.style.width = '36px';
         bar.textContent = num;
         if (activeIndices.includes(i)) bar.classList.add('active');
-        if (sortedIndex !== null && i >= sortedIndex) bar.classList.add('sorted');
+        if (sortedIndices.includes(i)) bar.classList.add('sorted');
         arrayContainer.appendChild(bar);
     });
 }
@@ -633,22 +654,73 @@ function resetSteps() {
     stepsDiv.innerHTML = '<strong style="color: #ffffff;">排序步驟：</strong>';
 }
 
-async function sleep(ms) {
-    return new Promise(resolve => {
-        const startTime = Date.now();
-        const checkInterval = setInterval(() => {
-            if (paused) {
-                clearInterval(checkInterval);
-                resolve();
-            } else if (Date.now() - startTime >= ms) {
-                clearInterval(checkInterval);
-                resolve();
-            }
-        }, 50);
-    });
+async function mergeSort(arr, left = 0, right = arr.length - 1, level = 0) {
+    if (left < right) {
+        const mid = Math.floor((left + right) / 2);
+        
+        // 左邊分割
+        await mergeSort(arr, left, mid, level + 1);
+        
+        // 右邊分割
+        await mergeSort(arr, mid + 1, right, level + 1);
+        
+        // 合併
+        await merge(arr, left, mid, right, level);
+    }
 }
 
-async function selectionSort() {
+async function merge(arr, left, mid, right, level) {
+    if (!sorting) return;
+    
+    const leftArr = arr.slice(left, mid + 1);
+    const rightArr = arr.slice(mid + 1, right + 1);
+    
+    let i = 0, j = 0, k = left;
+    
+    mergeLevels = Math.max(mergeLevels, level);
+    
+    while (i < leftArr.length && j < rightArr.length) {
+        while (paused && sorting) {
+            await sleep(100);
+        }
+        if (!sorting) return;
+        
+        // 比較
+        renderArray([left + i, mid + 1 + j], []);
+        logStep(`比較第 ${level + 1} 層：<b>${leftArr[i]}</b> 和 <b>${rightArr[j]}</b>`);
+        comparisons++;
+        updateStats();
+        await sleep(animationSpeed);
+        
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k++] = leftArr[i++];
+        } else {
+            arr[k++] = rightArr[j++];
+        }
+        swaps++;
+        updateStats();
+        renderArray([], []);
+        await sleep(animationSpeed / 2);
+    }
+    
+    while (i < leftArr.length) {
+        arr[k++] = leftArr[i++];
+        swaps++;
+        updateStats();
+    }
+    
+    while (j < rightArr.length) {
+        arr[k++] = rightArr[j++];
+        swaps++;
+        updateStats();
+    }
+    
+    renderArray([], []);
+    logStep(`第 ${level + 1} 層合併完成：[${arr.slice(left, right + 1).join(', ')}]`);
+    await sleep(animationSpeed / 3);
+}
+
+async function startMergeSort() {
     sorting = true;
     paused = false;
     startBtn.disabled = true;
@@ -657,48 +729,12 @@ async function selectionSort() {
     resetBtn.disabled = true;
     sizeInput.disabled = true;
     resetSteps();
+    logStep('開始合併排序（分治法）...');
     
-    let n = array.length;
-    
-    for (let i = 0; i < n - 1; i++) {
-        rounds = i + 1;
-        updateStats();
-        
-        let minIndex = i;
-        for (let j = i + 1; j < n; j++) {
-            // 暫停邏輯
-            while (paused && sorting) {
-                await sleep(100);
-            }
-            if (!sorting) break;
-            
-            renderArray([minIndex, j], i);
-            logStep(`比較 <b>${array[minIndex]}</b> 和 <b>${array[j]}</b>`);
-            comparisons++;
-            updateStats();
-            await sleep(animationSpeed);
-            
-            if (array[j] < array[minIndex]) {
-                minIndex = j;
-            }
-        }
-        
-        if (!sorting) break;
-        
-        if (minIndex !== i) {
-            logStep(`交換 <b>${array[i]}</b> 和 <b>${array[minIndex]}</b>`);
-            [array[i], array[minIndex]] = [array[minIndex], array[i]];
-            swaps++;
-            updateStats();
-            renderArray([i, minIndex], i);
-            await sleep(animationSpeed);
-        }
-        
-        renderArray([], i + 1);
-    }
+    await mergeSort(array);
     
     if (sorting) {
-        renderArray([], n);
+        renderArray([], Array.from({length: arraySize}, (_, i) => i));
         logStep('<b>排序結束！</b>');
     } else {
         logStep('<b>排序已停止</b>');
@@ -722,6 +758,7 @@ function resetArray() {
     comparisons = 0;
     swaps = 0;
     rounds = 0;
+    mergeLevels = 0;
     renderArray();
     resetSteps();
     updateStats();
@@ -747,7 +784,7 @@ speedSlider.addEventListener('input', () => {
 startBtn.onclick = () => {
     if (!sorting) {
         arraySize = parseInt(sizeInput.value) || 8;
-        selectionSort();
+        startMergeSort();
     }
 };
 
@@ -764,12 +801,11 @@ stepBtn.onclick = () => {
         paused = false;
         pauseBtn.textContent = '暫停';
         stepBtn.disabled = true;
-        // 會在下一次 await sleep 時再暫停
         setTimeout(() => {
             paused = true;
             pauseBtn.textContent = '繼續';
             stepBtn.disabled = false;
-        }, animationSpeed + 50); // 略大於動畫延遲
+        }, animationSpeed + 50);
     }
 };
 
